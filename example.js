@@ -85,8 +85,7 @@ async function createTransaction() {
     console.log(`\n\nSigned and sending transaction with txid ${result.txid} at fee rate ${satsPerKb} sats/kb`)
     console.log(`SmartFee append replaceable CPFP transactions to this transaction so it confirms in the next block.`)
     console.log(`SmartFee will bump the transaction any time its net fee rate falls below the current min-fee-rate of the next block.`)
-    console.log(`You can view the current min-fee-rate with the following command:\n\n`)
-    console.log(`curl https://api.smartfee.live/bumper/fee`)
+    console.log(`You can view the current min-fee-rate with the following command: ' curl https://api.smartfee.live/bumper/fee '`)
 }
 
 createTransaction()
