@@ -1,5 +1,5 @@
 const BitGoJS = require('bitgo')
-const request = require('request-promise')
+const fetch = require('node-fetch')
 
 /**
  * TODO: Enter your SmartFee api key below.
@@ -29,8 +29,7 @@ async function createTransaction() {
     console.log(`Generated bitgo address: ${newAddress.address} with label '${label}'`)
     // Post this address to SmartFee. SmartFee will return the leftover funds from fee-bumping to the 
     // most recent address you post so it is recommended to post a new address before each use.
-    await request({ 
-        url: `https://api-staging.smartfee.live/bumper/return_address`,
+    await fetch(`https://api-staging.smartfee.live/bumper/return_address`, {
         headers: { 
           'x-api-key': SMART_FEE_API_KEY,
           'content-type': 'application/json'
@@ -43,24 +42,25 @@ async function createTransaction() {
 
     // Now request an address from SmartFee. You will send funds here to fund the fee-bumping.
     // This can be re-used, but it is recommended to request a new address before each use.
-    const response = await request({
-        url: `https://api-staging.smartfee.live/bumper/address`,
+    const response = await fetch(`https://api-staging.smartfee.live/bumper/address`, {
         headers: { 
-          'X-API-KEY': SMART_FEE_API_KEY
+          'X-API-KEY': SMART_FEE_API_KEY,
+          'accept': 'application/json'
         },
         method: 'POST'
     })
-    const smartFeeAddress = JSON.parse(response).address
+    const smartFeeAddress = (await response.json()).address
     console.log(`Generated SmartFee address: ${smartFeeAddress}`)
     
-    // Get the current fee rate from Smart Fee.
-    const smartFeeResponse = await request({
-        url: `https://api-staging.smartfee.live/bumper/fee`,
+    // Get the current fee rate from Smart Fee. Both Testnet and Mainnet use Mainnet fee information
+    // because Testnet's fee market is non-existent so is bad for testing.
+    const smartFeeResponse = await fetch(`https://api-staging.smartfee.live/bumper/fee`, {
         headers: {
-            'X-API-KEY': SMART_FEE_API_KEY
+            'X-API-KEY': SMART_FEE_API_KEY,
+            'accept': 'application/json'
         }
     })
-    const satsPerKb = JSON.parse(smartFeeResponse).current_sats_per_kb
+    const satsPerKb = (await smartFeeResponse.json()).current_sats_per_kb
     console.log(`SmartFee is reporting the current next block min-fee-rate to be ${satsPerKb} sats/kb`)
 
     // Append an output to your recipients sending some funds to the SmartFee address.
@@ -85,7 +85,8 @@ async function createTransaction() {
     console.log(`\n\nSigned and sending transaction with txid ${result.txid} at fee rate ${satsPerKb} sats/kb`)
     console.log(`SmartFee append replaceable CPFP transactions to this transaction so it confirms in the next block.`)
     console.log(`SmartFee will bump the transaction any time its net fee rate falls below the current min-fee-rate of the next block.`)
-    console.log(`You can view the current min-fee-rate with the following command: ' curl https://api.smartfee.live/bumper/fee '`)
+    console.log(`You can view the current min-fee-rate with the following command:\n\n`)
+    console.log(`curl https://api.smartfee.live/bumper/fee`)
 }
 
 createTransaction()
