@@ -6,6 +6,9 @@ const fetch = require('node-fetch')
  */
 const SMART_FEE_API_KEY = process.env.SMART_FEE_API_KEY || ''
 
+const SMART_FEE_URL = 'https://api-staging.smartfee.live' // Testnet.
+// const SMART_FEE_URL = 'https://api.smartfee.live' // Mainnet.
+
 /**
  * TODO: Enter your BitGo wallet info below.
  */
@@ -29,7 +32,7 @@ async function createTransaction() {
     console.log(`Generated bitgo address: ${newAddress.address} with label '${label}'`)
     // Post this address to SmartFee. SmartFee will return the leftover funds from fee-bumping to the 
     // most recent address you post so it is recommended to post a new address before each use.
-    await fetch(`https://api-staging.smartfee.live/bumper/return_address`, {
+    await fetch(`${SMART_FEE_URL}/bumper/return_address`, {
         headers: { 
           'x-api-key': SMART_FEE_API_KEY,
           'content-type': 'application/json'
@@ -42,7 +45,7 @@ async function createTransaction() {
 
     // Now request an address from SmartFee. You will send funds here to fund the fee-bumping.
     // This can be re-used, but it is recommended to request a new address before each use.
-    const response = await fetch(`https://api-staging.smartfee.live/bumper/address`, {
+    const response = await fetch(`${SMART_FEE_URL}/bumper/address`, {
         headers: { 
           'X-API-KEY': SMART_FEE_API_KEY,
           'accept': 'application/json'
@@ -54,7 +57,7 @@ async function createTransaction() {
     
     // Get the current fee rate from Smart Fee. Both Testnet and Mainnet use Mainnet fee information
     // because Testnet's fee market is non-existent so is bad for testing.
-    const smartFeeResponse = await fetch(`https://api-staging.smartfee.live/bumper/fee`, {
+    const smartFeeResponse = await fetch(`${SMART_FEE_URL}/bumper/fee`, {
         headers: {
             'X-API-KEY': SMART_FEE_API_KEY,
             'accept': 'application/json'
@@ -64,7 +67,8 @@ async function createTransaction() {
     console.log(`SmartFee is reporting the current next block min-fee-rate to be ${satsPerKb} sats/kb`)
 
     // Append an output to your recipients sending some funds to the SmartFee address.
-    // The last recipient is to SmartFee. Be sure to send enough so that SmartFee can use it for fee bumping.
+    // It is recommended to send roughly the median amount of a full withdrawal batch. That way you'll 
+    // create a good sized utxo instead of a small one.
     console.log(`Adding a SmartFee output to your recipients:`)
     const smartFeeOutput = { address: smartFeeAddress, amount: 100000 }
     console.dir(smartFeeOutput)
