@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "bitgo": "^11.16.0",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "smart-fee-js": "^1.0.1"
   }
 }
