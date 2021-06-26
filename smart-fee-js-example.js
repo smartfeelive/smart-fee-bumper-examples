@@ -1,5 +1,5 @@
 const BitGoJS = require('bitgo')
-const smartFee = require('../smart-fee-js/index')
+const smartFee = require('smart-fee-js')
 /**
  * TODO: Enter your SmartFee api key below. You can request one from hello@smartfee.live
  */
