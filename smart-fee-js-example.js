@@ -24,8 +24,10 @@ const recipients = [{ address: '2NGPMcrY2XXrqxafzC76vU6UtuHqK7T33FM', amount: 30
 
 
 /**
- * TODO: Set you Smart Fee options. Below are two examples of valid options, basic and advanced. The apiKey
- * is required but all other parameters are optional.
+ * TODO: Set your Smart Fee options. Below are two examples of valid options, basic and advanced. The apiKey
+ * is required but all other parameters are optional. For more customized integrations see the smart-fee-js
+ * code itself: https://github.com/smartfeelive/smart-fee-js/blob/main/index.js and the public smart fee api:
+ * https://smartfee.live/docs/index.html
  */
 const basicSmartFeeOptions = {
   apiKey: SMART_FEE_API_KEY, // Required
