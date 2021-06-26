@@ -18,8 +18,8 @@ const BITGO_WALLET_PASSWORD = process.env.WALLET_PASSWORD || ''
  * TODO: Add your batched withdrawal recipients to the list below.
  * Or you can leave it empty for testing.
  */
-//const recipients = [{ address: 'tb1qwu9kscuqa39kj8jquwhuzcqttjtd43aqfxpjfyt6f2jw4ed2za8qmxp936', amount: 10000 }]
-const recipients = []
+const recipients = [{ address: 'tb1qwu9kscuqa39kj8jquwhuzcqttjtd43aqfxpjfyt6f2jw4ed2za8qmxp936', amount: 10000 }]
+//const recipients = []
 
 async function createTransaction() {
     // Initialize your BitGo wallet.
