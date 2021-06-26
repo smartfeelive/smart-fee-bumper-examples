@@ -46,8 +46,8 @@ async function createTransaction() {
     const wallet = await bitgo.coin('tbtc').wallets().get({ id: WALLET_ID })
 
     // See the two examples above for basic and advanced configurations.
-    // const smartFeeOptions = basicSmartFeeOptions()
-    const smartFeeOptions = advancedSmartFeeOptions()
+    // const smartFeeOptions = basicSmartFeeOptions
+    const smartFeeOptions = advancedSmartFeeOptions
 
     // Use Smart Fee to generate the BitGo send parameters. This will attempt to create a transaction to your 
     // recipients with no change output, and one output to Smart Fee to be used for fee bumping. It will only
